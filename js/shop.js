@@ -1,4 +1,3 @@
-
 // Array with products (objects) added directly with push(). Products in this array are repeated.
 var cartList = [];
 
@@ -23,12 +22,23 @@ function buy(id) {
     document.getElementById("count_product").innerHTML = cartList.length;
     total = calculateTotal();
     document.getElementById("total_price").innerHTML = total.toFixed(2);
-   
+
     console.log("Ex:1 cartList:", cartList);
-   }
+}
 
 // Exercise 2
+function deleteProperties() {
+    let aLen = cart.length;
+    for (let i = 0; i < aLen; i++) {
+        delete cart[i].subtotal;
+        delete cart[i].subtotalWithDiscount;
+        delete cart[i].priceWithDiscount;
+        delete cart[i].quantity
+    }
+}
+
 function cleanCart() {
+    deleteProperties();
     cartList.length = 0;
     cart.length = 0;
     total = calculateTotal();
@@ -41,15 +51,26 @@ function cleanCart() {
 }
 
 // Exercise 3
-function calculateTotal() {
-    // Calculate total price of the cart using the "cartList" array
-    total = 0;
-    let aLen = cartList.length;
-    for (let i = 0; i < aLen; i++) {
-        total += cartList[i].price;
-    }
+// function calculateTotal() {
+//     // Calculate total price of the cart using the "cartList" array
+//     total = 0;
+//     let aLen = cartList.length;
+//     for (let i = 0; i < aLen; i++) {
+//         total += cartList[i].price;
+//     }
 
-    console.log("Ex:3 calculateTotal():", Number(total.toFixed(2)));
+//     console.log("Ex:3 calculateTotal():", Number(total.toFixed(2)));
+//     return total;
+// }
+
+function calculateTotal() {
+    // Calculate total price of the cart using the "cart" array
+    total = 0;
+    let aLen = cart.length;
+    for (let i = 0; i < aLen; i++) {
+        total += cart[i].subtotalWithDiscount !== undefined ? cart[i].subtotalWithDiscount : cart[i].subtotal;
+    }
+    console.log("Ex:6 calculateTotal():", Number(total.toFixed(2)));
     return total;
 }
 
@@ -57,6 +78,7 @@ function calculateTotal() {
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+
     let aLen = cartList.length;
     cart.length = 0;
 
@@ -71,7 +93,7 @@ function generateCart() {
                 found = true;
             }
         }
-        
+
         // Si el producto no existe en el carrito (cart);
         if (!found) {
             cartList[i].quantity = 1;
@@ -79,9 +101,10 @@ function generateCart() {
             cart.push(cartList[i]);
         }
     }
-    applyPromotionsCart();
-    console.log("Ex:4 generateCart():", cart);
 
+    console.log("Ex:4 generateCart():", cart);
+    applyPromotionsCart();
+    printCart();
 }
 
 // Exercise 5
@@ -90,23 +113,44 @@ function applyPromotionsCart() {
 
     for (let i = 0; i < cart.length; i++) {
         let product = cart[i];
-        let priceWithDiscount = 0;
-        //Product with discount= Cooking oil
+
+            //Product with discount= Cooking oil
         if (product.id === 1 && product.quantity >= product.offer.number) {
-            priceWithDiscount = 10;
-            product.subtotalWithDiscount = priceWithDiscount * product.quantity;
+            product.priceWithDiscount = 10;
+            product.subtotalWithDiscount = product.priceWithDiscount * product.quantity;
             //Product with discount= instant cupcake mixture
         } else if (product.id === 3 && product.quantity >= product.offer.number) {
-            priceWithDiscount= product.price * (2 / 3);
-            product.subtotalWithDiscount = priceWithDiscount * product.quantity;
-        } 
+            product.priceWithDiscount = product.price * (2 / 3);
+            product.subtotalWithDiscount = product.priceWithDiscount * product.quantity;
+        }
     }
-    console.log("Ex:5 applyPromotionsCart():", cart);
+    // console.log("Ex:5 applyPromotionsCart():", cart);
 }
 
 // Exercise 6
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    //Reset 
+    document.getElementById("cart_list").innerHTML = "";
+    applyPromotionsCart();
+    total = calculateTotal();
+    let aLen = cart.length;
+    let result = "";
+
+    if (aLen > 0) {
+
+        for (let i = 0; i < aLen; i++) {
+            let product = cart[i];
+            result = ""
+            result += `<tr> <th scope="row">${product.name}</th>`;
+            result += `<td>${product.priceWithDiscount !== undefined ? (product.priceWithDiscount).toFixed(2) : (product.price).toFixed(2)} </td>`;
+            result += `<td>${product.quantity}</td>`;
+            result += `<td>$${product.subtotalWithDiscount !== undefined ? (product.subtotalWithDiscount).toFixed(2) : (product.subtotal).toFixed(2)} </td>`;
+
+            document.getElementById("cart_list").innerHTML += result;
+        }
+        document.getElementById("total_price").innerHTML = total.toFixed(2);
+    }
 }
 
 
