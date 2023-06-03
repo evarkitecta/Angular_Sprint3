@@ -1,9 +1,11 @@
+
 // Array with products (objects) added directly with push(). Products in this array are repeated.
 var cartList = [];
 
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 var cart = [];
-
+//Añado función para limpiar los valores iniciales del carrito que vienen por defecto
+cleanCart();
 var total = 0;
 
 // Exercise 1
@@ -19,20 +21,23 @@ function buy(id) {
         }
     }
     document.getElementById("count_product").innerHTML = cartList.length;
-    console.log("Ex:1 cartList:", cartList);
     total = calculateTotal();
     document.getElementById("total_price").innerHTML = total.toFixed(2);
    
-}
+    console.log("Ex:1 cartList:", cartList);
+   }
 
 // Exercise 2
 function cleanCart() {
     cartList.length = 0;
+    cart.length = 0;
     total = calculateTotal();
     document.getElementById("cart_list").innerHTML = "";
     document.getElementById("total_price").innerHTML = total.toFixed(2);
     document.getElementById("count_product").innerHTML = cartList.length;
+
     console.log("Ex:2 cartList cleanCart()", cartList);
+    console.log("Ex:2 cart cleanCart()", cartList);
 }
 
 // Exercise 3
@@ -43,7 +48,8 @@ function calculateTotal() {
     for (let i = 0; i < aLen; i++) {
         total += cartList[i].price;
     }
-    console.log("Ex:3 calculateTotal():", total);
+
+    console.log("Ex:3 calculateTotal():", Number(total.toFixed(2)));
     return total;
 }
 
@@ -51,6 +57,31 @@ function calculateTotal() {
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+    let aLen = cartList.length;
+    cart.length = 0;
+
+    for (let i = 0; i < aLen; i++) {
+        let found = false;
+
+        // Si el producto ya existe en el carrito (cart)
+        for (let j = 0; j < cart.length && !found; j++) {
+            if (cartList[i].id === cart[j].id) {
+                cart[j].quantity++;
+                cart[j].subtotal = cart[j].quantity * cart[j].price;
+                found = true;
+            }
+        }
+        
+        // Si el producto no existe en el carrito (cart);
+        if (!found) {
+            cartList[i].quantity = 1;
+            cartList[i].subtotal = cartList[i].quantity * cartList[i].price;
+            cart.push(cartList[i]);
+        }
+    }
+
+    console.log("Ex:4 generateCart():", cart);
+
 }
 
 // Exercise 5
