@@ -18,12 +18,17 @@ function buy(id) {
             found = true;
         }
     }
+    document.getElementById("count_product").innerHTML = cartList.length;
     console.log("Ex:1 cartList:", cartList);
 }
 
 // Exercise 2
 function cleanCart() {
-
+    cartList.length = 0;
+    document.getElementById("cart_list").innerHTML = "";
+    document.getElementById("total_price").innerHTML = total;
+    document.getElementById("count_product").innerHTML = cartList.length;
+    console.log("Ex:2 cartList cleanCart()", cartList);
 }
 
 // Exercise 3
