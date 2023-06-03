@@ -79,7 +79,7 @@ function generateCart() {
             cart.push(cartList[i]);
         }
     }
-
+    applyPromotionsCart();
     console.log("Ex:4 generateCart():", cart);
 
 }
@@ -87,6 +87,21 @@ function generateCart() {
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+
+    for (let i = 0; i < cart.length; i++) {
+        let product = cart[i];
+        let priceWithDiscount = 0;
+        //Product with discount= Cooking oil
+        if (product.id === 1 && product.quantity >= product.offer.number) {
+            priceWithDiscount = 10;
+            product.subtotalWithDiscount = priceWithDiscount * product.quantity;
+            //Product with discount= instant cupcake mixture
+        } else if (product.id === 3 && product.quantity >= product.offer.number) {
+            priceWithDiscount= product.price * (2 / 3);
+            product.subtotalWithDiscount = priceWithDiscount * product.quantity;
+        } 
+    }
+    console.log("Ex:5 applyPromotionsCart():", cart);
 }
 
 // Exercise 6
