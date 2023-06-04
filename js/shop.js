@@ -129,11 +129,22 @@ function applyPromotionsCart() {
 }
 
 // Exercise 6
+
+function setUpCounterCart(){
+    let aLen = cart.length;
+    let counterCart = 0;
+    for (let i = 0; i < aLen; i++) {
+        counterCart += cart[i].quantity;
+    }
+    document.getElementById('count_product').innerHTML = counterCart;
+}
+
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
     //Reset 
     document.getElementById("cart_list").innerHTML = "";
     document.getElementById("total_price").innerHTML = total.toFixed(2);
+
     applyPromotionsCart();
     total = calculateTotal();
     let aLen = cart.length;
@@ -153,19 +164,45 @@ function printCart() {
         }
         document.getElementById("total_price").innerHTML = total.toFixed(2);
     }
+    setUpCounterCart();
 }
 
 
 // ** Nivell II **
 
-// Exercise 7
+// Exercise 8
 function addToCart(id) {
     // Refactor previous code in order to simplify it 
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+      //Buscar si existe el id en cart
+      let product;
+      let found = false;
+      for (let i = 0; i < cart.length; i++) {
+          if (id === cart[i].id) {
+              found = true;
+              product = cart[i];
+          }
+      }
+      //si existe: 
+      if (found) {
+          product.quantity++;
+          product.subtotal = product.quantity * product.price;
+      } else {
+          //Buscar dentro del array productos el id seleccionado para entrarlo en cart
+          for (let j = 0; j < products.length; j++) {
+              if (id === products[j].id) {
+                  products[j].quantity = 1;
+                  products[j].subtotal = products[j].quantity * products[j].price;
+                  cart.push(products[j]);
+              }
+          }
+      }
+      console.log("cart:", cart);
+      printCart();
 }
 
-// Exercise 8
+// Exercise 9
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
