@@ -228,7 +228,7 @@ function removeFromCart(id) {
     console.log("cart:", cart);
     if (substract.quantity === 1) {
         cart.splice(substract, 1);
-        // calculateTotal()
+        calculateTotal()
     } else {
         substract.quantity--;
         substract.subtotal = substract.quantity * substract.price;
